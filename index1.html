@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Titanic Data Visualization</title>
+  <meta name="description" content="Visualization of Titanic Passenger Data" />
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="titanic_style.css" type="text/css" />
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+  <script type="text/javascript">
+
+
+
+
+    function draw_demograph(data) {
+
+    /*D3.js setup code*/
+
+    scaler = 0.5
+    "use strict";
+    var margin = 40,
+    width = 1100 * scaler,
+    height = 600 * scaler;
+
+    var svg_gender = d3.select("#demo_container")
+    .append("svg")
+    .attr("width", width + margin)
+    .attr("height", height + margin)
+    .append('g')
+    .attr('class','chart')
+
+    var svg_class = d3.select("#demo_container")
+    .append("svg")
+    .attr("width", width + margin)
+    .attr("height", height + margin)
+    .append('g')
+    .attr('class','chart')
+
+    var svg_age = d3.select("#demo_container")
+    .append("svg")
+    .attr("width", width + margin)
+    .attr("height", height + margin)
+    .append('g')
+    .attr('class','chart')
+
+
+    var myChart = new dimple.chart(svg_gender, data);
+    var x = myChart.addCategoryAxis("x", ["Sex"]);
+    var y = myChart.addMeasureAxis('y','PassengerId');
+    /* Axis titles */
+    x.title = "Gender";
+    x.addOrderRule(['male', "female"]);
+    y.title = "Number of Passengers";
+    var mySeries = myChart.addSeries(null, dimple.plot.bar);
+    mySeries.aggregate = dimple.aggregateMethod.count;
+    myChart.draw();
+
+
+    var myChart = new dimple.chart(svg_class, data);
+    var x = myChart.addCategoryAxis("x", ["class"]);
+    var y = myChart.addMeasureAxis('y','PassengerId');
+    /* Axis titles */
+    x.title = "class";
+    y.title = "Number of Passengers";
+    var mySeries = myChart.addSeries(null, dimple.plot.bar);
+    mySeries.aggregate = dimple.aggregateMethod.count;
+    myChart.draw();
+
+
+
+    var myChart = new dimple.chart(svg_age, data);
+    var x = myChart.addCategoryAxis("x",['age_bin']); 
+    var y = myChart.addMeasureAxis('y','PassengerId');
+    x.addOrderRule(['0-11', "11-20", "21-30", "31-40", "41-50", "51-60", "61-80"]);
+    x.title = "Age";
+    y.title = "Number of Passengers";
+    var mySeries = myChart.addSeries(null, dimple.plot.bar);
+    mySeries.aggregate = dimple.aggregateMethod.count;
+    myChart.draw();
+
+    };
+
+    function draw_gender(data){
+      
+
+      scaler = 0.5
+      "use strict";
+      var margin = 40,
+      width = 1100 * scaler,
+      height = 600 * scaler;
+
+
+      var survival_gender = d3.select("#gender_container")
+      .append("svg")
+      .attr("width", width + margin)
+      .attr("height", height + margin)
+      .append('g')
+      .attr('class','chart')
+
+
+      var survival_gender_pct = d3.select("#gender_container")
+      .append("svg")
+      .attr("width", width + margin)
+      .attr("height", height + margin)
+      .append('g')
+      .attr('class','chart')
+
+
+      var myChart = new dimple.chart(survival_gender, data);
+      var x = myChart.addCategoryAxis("x", ["Sex"]);
+      x.addOrderRule(['male', "female"]);
+      var y = myChart.addMeasureAxis("y",['PassengerId']);
+      /* Axis titles */
+      x.title = "Gender";
+      y.title = "Number of Passengers";
+      var mySeries = myChart.addSeries('Survived', dimple.plot.bar);
+      mySeries.aggregate = dimple.aggregateMethod.count;
+      mySeries.addOrderRule([1, 0])
+      myChart.addLegend(60, 10, 350, 20, "right");
+      myChart.draw();
+
+
+
+      var myChart = new dimple.chart(survival_gender_pct, data);
+      var x = myChart.addCategoryAxis("x", ["Sex"]);
+      x.addOrderRule(['male', "female"]);
+      var y = myChart.addPctAxis("y",['PassengerId']);
+      /* Axis titles */
+      x.title = "Gender";
+      y.title = "Number of Passengers";
+      var mySeries = myChart.addSeries('Survived', dimple.plot.bar);
+      mySeries.aggregate = dimple.aggregateMethod.count;
+      mySeries.addOrderRule(['1', '0'])
+      myChart.addLegend(60, 10, 350, 20, "right");
+      myChart.draw();
+
+
+    };
+
+
+    function draw_class(data){
+
+      scaler = 0.5
+      "use strict";
+      var margin = 40,
+      width = 1100 * scaler,
+      height = 600 * scaler;
+
+
+      var survival_class = d3.select("#class_container")
+      .append("svg")
+      .attr("width", width + margin)
+      .attr("height", height + margin)
+      .append('g')
+      .attr('class','chart')
+
+
+      var survival_class_pct = d3.select("#class_container")
+      .append("svg")
+      .attr("width", width + margin)
+      .attr("height", height + margin)
+      .append('g')
+      .attr('class','chart')
+
+
+      var myChart = new dimple.chart(survival_class, data);    
+      var x = myChart.addCategoryAxis("x", ["class"]);
+      var y = myChart.addMeasureAxis('y','PassengerId');
+      x.addOrderRule("class");
+      x.title = "Ticket Class";
+      x.addOrderRule(['1', "2", "3"]);
+      y.title = "Number of Passengers";
+      var mySeries = myChart.addSeries('Survived', dimple.plot.bar);
+      mySeries.aggregate = dimple.aggregateMethod.count;
+      mySeries.addOrderRule(['1', '0'])
+      myChart.addLegend(60, 10, 350, 20, "right");
+      myChart.draw();
+
+      var myChart = new dimple.chart(survival_class_pct, data);
+      var x = myChart.addCategoryAxis("x", ["class"]);
+      var y = myChart.addPctAxis('y','PassengerId');
+      x.addOrderRule("class");
+      x.title = "Ticket Class";
+      x.addOrderRule(['1', "2", "3"]);
+      y.title = "Number of Passengers";
+      var mySeries = myChart.addSeries('Survived', dimple.plot.bar);
+      mySeries.aggregate = dimple.aggregateMethod.count;
+      mySeries.addOrderRule(['1', '0'])
+      myChart.addLegend(60, 10, 350, 20, "right");
+      myChart.draw();
+
+
+
+    };
+
+
+    function draw_age(data){
+
+
+      scaler = 0.5
+      "use strict";
+      var margin = 40,
+      width = 1100 * scaler,
+      height = 600 * scaler;
+
+
+      var survival_age = d3.select("#age_container")
+      .append("svg")
+      .attr("width", width + margin)
+      .attr("height", height + margin)
+      .append('g')
+      .attr('class','chart')
+
+
+      var survival_age_pct = d3.select("#age_container")
+      .append("svg")
+      .attr("width", width + margin)
+      .attr("height", height + margin)
+      .append('g')
+      .attr('class','chart')
+
+      var myChart = new dimple.chart(survival_age, data);
+      var x = myChart.addCategoryAxis("x",['age_bin']); 
+      var y = myChart.addMeasureAxis('y','PassengerId');
+      x.addOrderRule(['0-11', "11-20", "21-30", "31-40", "41-50", "51-60", "61-80"]);
+      x.title = "Age";
+      y.title = "Number of Passengers";
+      y.showGridlines = false;
+      var mySeries = myChart.addSeries('Survived', dimple.plot.bar);
+      mySeries.aggregate = dimple.aggregateMethod.count;
+      mySeries.addOrderRule(['1', '0'])
+      myChart.addLegend(60, 10, 350, 20, "right");
+      myChart.draw();
+
+
+      var myChart = new dimple.chart(survival_age_pct, data);
+      var x = myChart.addCategoryAxis("x",['age_bin']); 
+      var y = myChart.addPctAxis('y','PassengerId');
+      x.addOrderRule(['0-11', "11-20", "21-30", "31-40", "41-50", "51-60", "61-80"]);
+      x.title = "Age";
+      y.title = "Number of Passengers";
+      y.showGridlines = false;
+      var mySeries = myChart.addSeries('Survived', dimple.plot.bar);
+      mySeries.aggregate = dimple.aggregateMethod.count;
+      mySeries.addOrderRule(['1', '0'])
+      myChart.addLegend(60, 10, 350, 20, "right");
+      myChart.draw();
+
+    };
+
+
+
+
+
+
+
+
+
+      </script>
+    </head>
+
+    <body>
+
+      <header>
+        <div class = "title">
+          <h1 >Data Visualization with dimple.js</h1>
+        </div> 
+        </header>
+
+      <div class = "question1">
+          <h3 > Purpose:  To draw effective visualizations from Titanic Dataset.  </h2>
+        </div>   
+      
+      <div class = "question2">
+          <h3 > Data Overview</h3>
+          <p>Below is the overview of the data with respect to Gender, Class and Age Group.</p>
+
+        </div>  
+
+
+      <div id="demo_container" class = "svg_Container">
+          <script type="text/javascript">
+          d3.csv("titanic_data.csv", draw_demograph);
+          </script>
+        </div>
+
+      <div class = "question3">
+          <h3 > 1. Which gender had a better chance of survival?</h3>
+          <p>Did any gender were given preference while saving lives? Let us look at the data with various plots to find our answer. </p>
+
+        </div>   
+
+      <div id="gender_container" class = "gender_Container">
+          <script type="text/javascript">
+          d3.csv("titanic_data.csv", draw_gender);
+          </script>
+        </div>  
+
+      <div class = "question2">
+          <h3 > 2. Which social class had a better chance of survival?</h3>
+          <p>As there were limited life boats in titanic, Let us see if people who were rich or people who had high class ticket for titanic were given any preference while saving lives.</p>
+
+          <ul>
+            <li>First Class</li>
+            <li>Second Class</li>
+            <li>Third Class</li>
+          </ul>
+
+        </div>   
+
+      <div id="class_container" class = "class_Container">
+          <script type="text/javascript">
+          d3.csv("titanic_data.csv", draw_class);
+          </script>
+        </div>
+
+      <div class = "question3">
+          <h3 > 3. Which age group had a better chance of survival?</h3>
+          <p>At the time of a catastrophe, Morally children are given a priority while saving lives. We look at this aspect while visualizing our data</p>
+
+        </div>  
+
+      <div id="age_container" class = "age_Container">
+          <script type="text/javascript">
+          d3.csv("titanic_data.csv", draw_age);
+          </script>
+        </div>
+
+      <div class = "question1">
+          <h2 > Conclusion:-</h2>
+          
+          <ul>
+            <li>1. We notice that upper class was given priority while saving lives, Our visualizations clearly depicts that despite class 3 people were higher in number, they survived less. </li>
+            <li>2. Women were also given priority while saving lives. We see huge difference in the percent of survivability of male and female.</li>
+            <li>3. We do not notice any clear trend in survivability by age group, But we can say that children with age group 0-9 were given priority over elderly people with age group 61-80. </li>
+          </ul>
+
+        </div>  
+
+
+      </body>
+
+    <footer>
+    </footer>
+    </html>
+
+
